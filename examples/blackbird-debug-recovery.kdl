@@ -1,0 +1,46 @@
+runbook "blackbird-debug-recovery" {
+    // Same working set as trace recovery: normally one selected shard.
+    // The difference is the launch step, which waits for an IDE to attach.
+    config "env" source="examples/blackbird-env.conf"
+
+    task "Debug startup recovery" for_each="${config.env.run.selected_shards}" label="${item.name}" {
+        ssh {
+            host "${item.host}"
+            user "${config.env.ssh.user}"
+        }
+
+        cwd "${item.trace_root}"
+
+        step "Clone app root" {
+            shell """
+                rsync -a \
+                    --exclude 'data/trading/archive/' \
+                    --exclude 'log/trading/archive/' \
+                    "${item.root}/" .
+                """
+        }
+
+        step "Seed inbound log" {
+            run cp "${item.inbound_log}" "log/trading/${item.in_log}"
+        }
+
+        step "Enable debug config" {
+            shell """
+                sed -i.bak \
+                    -e 's/log.level=ERROR/log.level=DEBUG/g' \
+                    -e 's/log.level=error/log.level=debug/g' \
+                    -e 's/PRD/DEV/g' \
+                    -e 's/prd/dev/g' \
+                    config/environment.conf
+                """
+        }
+
+        step "Start Blackbird suspended" {
+            shell """
+                export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${config.env.blackbird.solace_ssl_lib}:${config.env.blackbird.native_lib}"
+                export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:${item.debug_port}"
+                app/trading/bin/start.sh
+                """
+        }
+    }
+}

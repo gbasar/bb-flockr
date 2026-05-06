@@ -1,0 +1,135 @@
+// Flockr — Project Specification
+// A general-purpose, config-driven command runner.
+// Minimal hard-coding and assumptions. Even the configuration format is configurable.
+
+// ─── Overview ───────────────────────────────────────────────────────────────
+//
+// A flockr run is composed of:
+//
+//   configuration + runbook (the plan / task at hand) + injected overrides
+//
+// Configuration layers (lower layers override higher):
+//
+//   optional (any may be absent)                              always evaluated
+//   (appConfig → userConfig → projectConfig)  →  [env vars + runbook + injection]
+//                                                              → CLI override
+//
+// Flockr is KDL-first. HOCON is supported but is resolved into a single merged
+// object before use — HOCON is strongly recommended only for manual authoring.
+//
+// Layer         Source                                        Notes
+// ──────────    ──────────────────────────────────────────    ─────────────────────────────
+// appConfig     bundled package resource (flockr-defaults.kdl)  overrideable via CLI/env
+// userConfig    ~/.config/flockr/flockr.conf                  skipped if absent
+// projectConfig ${project.dir}/conf/${project.name}.conf      skipped if absent
+// runbook       what we are doing right now                   always evaluated
+// env vars      environment context                           always evaluated
+// CLI           what I want right now                         always evaluated
+//
+// Example API:
+//   run(task, inject={"user": "admin", "debug": True})
+
+// ─── Default Configuration ──────────────────────────────────────────────────
+flockr {
+    defaults {
+        mode "dry-run"   // dev: anything goes; prod: requires a ChangeRequest
+
+        logging {
+            verbosity "vvv"  // controls application debug logging, not output
+        }
+
+        output {
+            sink "file"   path "${project.dir}/flockr.log"
+            sink "stdout"
+        }
+
+        runtime {
+            threading:1 // accepots ame values as maven -T such as -T8 or -T.5C
+            // user: defaults to current OS user if not specified
+            ssh_home "${USER}/.ssh"
+            proxy {}
+            exceptions: "logExceptionsAndContinue"
+        }
+    }
+}
+
+// ─── Engine Architecture ────────────────────────────────────────────────────
+//
+// Config Engine
+//   1. Reads config from file or URL
+//   2. Resolves and merges layers per the precedence order above
+//
+// Run Engine
+//   1. Reads and resolves config
+//   2. Reads runbook
+//   3. Applies overrides (env, CLI, inject)
+//   4. Runner (single or multi-threaded)
+//      - Context Creator: prepares the execution environment
+//          local  → cd to working directory
+//          remote → SSH (v1), Teleport (future); copies executables and payloads
+//      - Executor: runs individual tasks (v1: terminal commands with stdin/stdout)
+//      - Collator: gathers and routes output to configured sinks
+//
+// Output Modules: stdout, file, Solace (see sink examples below)
+
+// ─── Output Sink Examples ───────────────────────────────────────────────────
+
+// Level 1 — Simple sink
+output {
+    sink "stdout"
+}
+
+// Level 2 — Inline file sink
+output {
+    sink "stdout"
+    sink "file" path="/output/log.txt"
+}
+
+// Level 3 — Structured sink (block form)
+output {
+    sink "stdout"
+
+    sink "file" {
+        path     "/output/log.txt"
+        rotate   true
+        max_size "10MB"
+    }
+}
+
+// Level 4 — Enterprise / plugin-grade sink (Solace example)
+output {
+    sink "stdout"
+
+    sink "solace" {
+        host  "broker.acme.com"
+        vpn   "prod-vpn"
+        topic "flockr/events"
+
+        auth {
+            type         "env"
+            username_env "SOLACE_USER"
+            password_env "SOLACE_PASS"
+        }
+
+        qos 1
+
+        retry {
+            attempts   5
+            backoff    "exponential"
+            base_delay "200ms"
+            max_delay  "5s"
+        }
+
+        batching {
+            enabled  true
+            size     100
+            interval "1s"
+        }
+    }
+
+    sink "file" {
+        path     "/output/log.txt"
+        rotate   true
+        max_size "10MB"
+    }
+}

@@ -1,0 +1,7 @@
+login banner
+__FLOCKR_token_START_0__
+one stdout
+__FLOCKR_token_EXIT_0__:0
+__FLOCKR_token_START_1__
+two stdout
+__FLOCKR_token_EXIT_1__:2

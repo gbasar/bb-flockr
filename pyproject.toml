@@ -1,0 +1,42 @@
+[project]
+name = "flockr"
+version = "0.1.0"
+description = "A generic, config-driven command runner"
+requires-python = ">=3.12"
+dependencies = [
+    "ckdl>=1.0",
+    "pydantic>=2.12",
+]
+
+[project.scripts]
+flockr = "flockr.cli:main"
+
+[project.optional-dependencies]
+hocon = [
+    "pyhocon>=0.3.61",
+]
+dev = [
+    "black>=25.1",
+    "build>=1.2",
+    "pytest>=8.3",
+    "pytest-asyncio>=0.25",
+    "ruff>=0.8",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+filterwarnings = [
+    "ignore:codecs\\.open\\(\\) is deprecated\\. Use open\\(\\) instead\\.:DeprecationWarning:pyhocon\\.config_parser",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "UP"]
+
+[tool.black]
+line-length = 120
+target-version = ["py312"]

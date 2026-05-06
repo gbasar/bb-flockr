@@ -1,0 +1,10 @@
+runbook "demo" {
+    config "envConf" source="environment.conf"
+    config "defaults.kdl"
+
+    task "inspect" {
+        command "pwd" {
+            exec "pwd"
+        }
+    }
+}

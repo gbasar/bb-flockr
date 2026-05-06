@@ -1,0 +1,71 @@
+runbook "blackbird-replay" {
+    // Environment config describes the shards and shared Blackbird/Solace paths.
+    // The runbook owns the operation; config owns the facts.
+    config "env" source="examples/blackbird-env.conf"
+
+    // Input values are invocation-time strings. This one is the local path to a
+    // file containing one order/ExecID per line.
+    input "order_ids_file" default="orders-to-replay.txt"
+
+    task "Prepare local replay inputs" {
+        local {
+            cwd "${project.dir}"
+        }
+
+        step "Check order id file" {
+            run test -s "${input.order_ids_file}"
+        }
+
+        step "Show target environment" {
+            run printf "solace=%s vpn=%s\n" "${config.env.solace.host}" "${config.env.solace.vpn}"
+        }
+    }
+
+    task "Replay trade messages" for_each="${config.env.blackbird.shards}" label="${item.name}" {
+        ssh {
+            host "${item.host}"
+            user "${config.env.ssh.user}"
+        }
+
+        // cwd is process context. On SSH, Flockr runs `cd <cwd> && <command>`.
+        cwd "${item.root}"
+
+        step "Upload order id file" {
+            local {
+                cwd "${project.dir}"
+            }
+
+            run scp "${input.order_ids_file}" "${config.env.ssh.user}@${item.host}:${item.root}/replay-order-ids.txt"
+        }
+
+        step "Unpack archive" {
+            run tar -xzf "${item.archive}" -C .
+        }
+
+        step "Copy trading logs" {
+            shell "cp log/trading/* ."
+        }
+
+        step "Repair copied log" {
+            shell """
+                export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${config.env.blackbird.solace_ssl_lib}:${config.env.blackbird.native_lib}"
+                printf 'open %s --repair --mode rw\nquit\n' "${item.log_file}" | "${config.env.blackbird.tlt}"
+                """
+        }
+
+        step "Replay selected orders" {
+            shell """
+                export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${config.env.blackbird.solace_ssl_lib}:${config.env.blackbird.native_lib}"
+                order_ids="$(sed '/^[[:space:]]*$/d' replay-order-ids.txt | sed "s/.*/'&'/" | paste -sd, -)"
+                selector="entry.className='com.barclays.eq.roe.salestrading.TradeMessage' and ExecID in ($order_ids)"
+
+                java -cp "${item.app_jar}" \
+                    com.barclays.eq.apex.tools.TxnLogRepublisher \
+                    --host="${config.env.solace.host}" \
+                    --vpn="${config.env.solace.vpn}" \
+                    "${item.log_file}" \
+                    "$selector"
+                """
+        }
+    }
+}

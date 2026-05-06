@@ -1,0 +1,6 @@
+__FLOCKR_token_START_0__
+one stderr
+__FLOCKR_token_EXIT_0__:0
+__FLOCKR_token_START_1__
+two stderr
+__FLOCKR_token_EXIT_1__:2

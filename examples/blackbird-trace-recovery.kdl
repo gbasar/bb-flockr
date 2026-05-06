@@ -1,0 +1,43 @@
+runbook "blackbird-trace-recovery" {
+    // This workflow replays inbound transaction-log state through the full app.
+    // It intentionally uses a selected working set, normally one shard.
+    config "env" source="examples/blackbird-env.conf"
+
+    task "Trace startup recovery" for_each="${config.env.run.selected_shards}" label="${item.name}" {
+        ssh {
+            host "${item.host}"
+            user "${config.env.ssh.user}"
+        }
+
+        cwd "${item.trace_root}"
+
+        step "Clone app root" {
+            shell """
+                rsync -a \
+                    --exclude 'data/trading/archive/' \
+                    --exclude 'log/trading/archive/' \
+                    "${item.root}/" .
+                """
+        }
+
+        step "Seed inbound log" {
+            run cp "${item.inbound_log}" "log/trading/${item.in_log}"
+        }
+
+        step "Enable trace logging" {
+            shell """
+                sed -i.bak \
+                    -e 's/log.level=ERROR/log.level=TRACE/g' \
+                    -e 's/log.level=error/log.level=trace/g' \
+                    config/environment.conf
+                """
+        }
+
+        step "Start Blackbird" {
+            shell """
+                export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${config.env.blackbird.solace_ssl_lib}:${config.env.blackbird.native_lib}"
+                app/trading/bin/start.sh
+                """
+        }
+    }
+}

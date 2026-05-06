@@ -1,0 +1,8 @@
+services:
+  flockr-fedora-shard-a:
+    ports:
+      - "22"
+
+  flockr-fedora-shard-b:
+    ports:
+      - "22"

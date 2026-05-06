@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="bg1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0d1828"/>
+      <stop offset="100%" stop-color="#040810"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="200" height="200" fill="url(#bg1)" rx="18"/>
+
+  <!-- Radar glow from center -->
+  <circle cx="100" cy="108" r="60" fill="url(#glow)"/>
+
+  <!-- Command lines to shards -->
+  <line x1="100" y1="108" x2="32"  y2="42"  stroke="#00d4ff" stroke-width="0.6" opacity="0.35"/>
+  <line x1="100" y1="108" x2="168" y2="42"  stroke="#00d4ff" stroke-width="0.6" opacity="0.35"/>
+  <line x1="100" y1="108" x2="22"  y2="108" stroke="#00d4ff" stroke-width="0.6" opacity="0.35"/>
+  <line x1="100" y1="108" x2="178" y2="108" stroke="#00d4ff" stroke-width="0.6" opacity="0.35"/>
+  <line x1="100" y1="108" x2="38"  y2="168" stroke="#00d4ff" stroke-width="0.6" opacity="0.35"/>
+  <line x1="100" y1="108" x2="162" y2="168" stroke="#00d4ff" stroke-width="0.6" opacity="0.35"/>
+
+  <!-- Shard nodes -->
+  <circle cx="32"  cy="42"  r="4.5" fill="none" stroke="#00d4ff" stroke-width="1" opacity="0.85"/>
+  <circle cx="32"  cy="42"  r="2"   fill="#00d4ff" opacity="0.9"/>
+  <circle cx="168" cy="42"  r="4.5" fill="none" stroke="#00d4ff" stroke-width="1" opacity="0.85"/>
+  <circle cx="168" cy="42"  r="2"   fill="#00d4ff" opacity="0.9"/>
+  <circle cx="22"  cy="108" r="4.5" fill="none" stroke="#00d4ff" stroke-width="1" opacity="0.85"/>
+  <circle cx="22"  cy="108" r="2"   fill="#00d4ff" opacity="0.9"/>
+  <circle cx="178" cy="108" r="4.5" fill="none" stroke="#00d4ff" stroke-width="1" opacity="0.85"/>
+  <circle cx="178" cy="108" r="2"   fill="#00d4ff" opacity="0.9"/>
+  <circle cx="38"  cy="168" r="4.5" fill="none" stroke="#00d4ff" stroke-width="1" opacity="0.85"/>
+  <circle cx="38"  cy="168" r="2"   fill="#00d4ff" opacity="0.9"/>
+  <circle cx="162" cy="168" r="4.5" fill="none" stroke="#00d4ff" stroke-width="1" opacity="0.85"/>
+  <circle cx="162" cy="168" r="2"   fill="#00d4ff" opacity="0.9"/>
+
+  <!-- SR-71 top-down silhouette, nose pointing up, centered at 100,108 -->
+  <!-- Main body: chined fuselage + delta wings -->
+  <path d="
+    M 100,30
+    C 103,38 110,58 116,76
+    L 148,122
+    L 144,136
+    L 136,148
+    L 126,157
+    L 118,164
+    L 112,170
+    L 100,174
+    L 88,170
+    L 82,164
+    L 74,157
+    L 64,148
+    L 56,136
+    L 52,122
+    L 84,76
+    C 90,58 97,38 100,30
+    Z
+  " fill="#8c9ab0" opacity="0.95"/>
+
+  <!-- Fuselage spine highlight -->
+  <path d="
+    M 100,30
+    C 101,45 102,70 102,95
+    L 103,140
+    L 101,165
+    L 100,174
+    L 99,165
+    L 97,140
+    L 98,95
+    C 98,70 99,45 100,30
+    Z
+  " fill="#c8d4e8" opacity="0.5"/>
+
+  <!-- Left nacelle -->
+  <path d="
+    M 64,125 C 60,130 58,140 60,152 C 62,158 66,160 70,158 C 74,156 76,148 74,138 C 72,130 68,124 64,125 Z
+  " fill="#6a7888" opacity="0.9"/>
+
+  <!-- Right nacelle -->
+  <path d="
+    M 136,125 C 140,130 142,140 140,152 C 138,158 134,160 130,158 C 126,156 124,148 126,138 C 128,130 132,124 136,125 Z
+  " fill="#6a7888" opacity="0.9"/>
+
+  <!-- Cockpit glint -->
+  <ellipse cx="100" cy="62" rx="4" ry="6" fill="#00d4ff" opacity="0.4"/>
+</svg>

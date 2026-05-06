@@ -1,0 +1,64 @@
+services:
+  config-web:
+    image: ${FLOCKR_E2E_NGINX_IMAGE:-nginx:alpine}
+    hostname: flockr-config-web
+    volumes:
+      - .:/usr/share/nginx/html:ro
+
+  flockr-fedora-cnc:
+    build:
+      context: ../..
+      dockerfile: docker/fedora-cnc/Dockerfile
+      args:
+        UBI_IMAGE: ${FLOCKR_E2E_UBI_IMAGE:-registry.access.redhat.com/ubi9/ubi:latest}
+    hostname: flockr-fedora-cnc
+    command: ["sleep", "infinity"]
+    volumes:
+      - ../../.docker/ssh/id_ed25519:/workspace/flockr/.docker/ssh/id_ed25519:ro
+    depends_on:
+      - config-web
+      - flockr-fedora-shard-a
+      - flockr-fedora-shard-b
+      - flockr-fedora-shard-c
+      - flockr-fedora-shard-d
+      - flockr-fedora-shard-e
+
+  flockr-fedora-shard-a:
+    build:
+      context: ../../docker/ssh-target
+      args:
+        UBI_OPENJDK_IMAGE: ${FLOCKR_E2E_UBI_OPENJDK_IMAGE:-registry.access.redhat.com/ubi9/openjdk-17:latest}
+        UBI_MINIMAL_IMAGE: ${FLOCKR_E2E_UBI_MINIMAL_IMAGE:-registry.access.redhat.com/ubi9/ubi-minimal:latest}
+    hostname: flockr-fedora-shard-a
+
+  flockr-fedora-shard-b:
+    build:
+      context: ../../docker/ssh-target
+      args:
+        UBI_OPENJDK_IMAGE: ${FLOCKR_E2E_UBI_OPENJDK_IMAGE:-registry.access.redhat.com/ubi9/openjdk-17:latest}
+        UBI_MINIMAL_IMAGE: ${FLOCKR_E2E_UBI_MINIMAL_IMAGE:-registry.access.redhat.com/ubi9/ubi-minimal:latest}
+    hostname: flockr-fedora-shard-b
+
+  flockr-fedora-shard-c:
+    build:
+      context: ../../docker/ssh-target
+      args:
+        UBI_OPENJDK_IMAGE: ${FLOCKR_E2E_UBI_OPENJDK_IMAGE:-registry.access.redhat.com/ubi9/openjdk-17:latest}
+        UBI_MINIMAL_IMAGE: ${FLOCKR_E2E_UBI_MINIMAL_IMAGE:-registry.access.redhat.com/ubi9/ubi-minimal:latest}
+    hostname: flockr-fedora-shard-c
+
+  flockr-fedora-shard-d:
+    build:
+      context: ../../docker/ssh-target
+      args:
+        UBI_OPENJDK_IMAGE: ${FLOCKR_E2E_UBI_OPENJDK_IMAGE:-registry.access.redhat.com/ubi9/openjdk-17:latest}
+        UBI_MINIMAL_IMAGE: ${FLOCKR_E2E_UBI_MINIMAL_IMAGE:-registry.access.redhat.com/ubi9/ubi-minimal:latest}
+    hostname: flockr-fedora-shard-d
+
+  flockr-fedora-shard-e:
+    build:
+      context: ../../docker/ssh-target
+      args:
+        UBI_OPENJDK_IMAGE: ${FLOCKR_E2E_UBI_OPENJDK_IMAGE:-registry.access.redhat.com/ubi9/openjdk-17:latest}
+        UBI_MINIMAL_IMAGE: ${FLOCKR_E2E_UBI_MINIMAL_IMAGE:-registry.access.redhat.com/ubi9/ubi-minimal:latest}
+    hostname: flockr-fedora-shard-e

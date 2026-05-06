@@ -1,0 +1,6 @@
+deploy {
+    instances {
+        item name="alpha" base_dir="${project.dir}"
+        item name="beta" base_dir="${project.dir}"
+    }
+}

@@ -1,0 +1,11 @@
+# Python Code Style Rules
+- Modern, cutting edge (if not bleeding edge) without going over the edge ege the edge 
+- Function over form, readability over performance 
+- HUMAN optimized - abstraction is the foundation of computer science
+- Type hints on every function — parameters and return type, always
+- Use `str | None` not `Optional[str]`; use `list[str]` not `List[str]`
+- Function names should be verbs: `get_user`, `create_post`, `delete_session`
+- File names use kebab-case: `user-handler.py`, `auth-middleware.py`
+- No commented-out code in commits
+- Max file length: 300 lines; max function length: 50 lines MAX average much less
+- Run `ruff check` before committing — config lives in `pyproject.toml`

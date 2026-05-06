@@ -1,0 +1,6 @@
+deploy {
+    instances {
+        item name="archive-alpha" host="localhost" port="2221" login="flockr" base_dir="/apps/flockr" identity_file="${project.dir}/.docker/ssh/id_ed25519"
+        item name="archive-beta" host="localhost" port="2222" login="flockr" base_dir="/apps/flockr" identity_file="${project.dir}/.docker/ssh/id_ed25519"
+    }
+}

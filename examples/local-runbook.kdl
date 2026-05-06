@@ -1,0 +1,11 @@
+runbook "local-demo" {
+    input "replay_id_file" default="${project.dir}/resources/ids_to_replay.log"
+
+    task "inspect" for_each="${config.envConf.deploy.instances}" {
+        context "local" cwd="${item.base_dir}"
+
+        command "print-instance" {
+            exec "printf" "instance=%s ids=%s\n" "${item.name}" "${input.replay_id_file}"
+        }
+    }
+}

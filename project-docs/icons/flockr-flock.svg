@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="bg2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#111318"/>
+      <stop offset="100%" stop-color="#07080a"/>
+    </radialGradient>
+    <!-- Bird shape reusable -->
+    <!-- Birds drawn inline for compatibility -->
+  </defs>
+
+  <!-- Background -->
+  <rect width="200" height="200" fill="url(#bg2)" rx="18"/>
+
+  <!-- Subtle convergence lines toward command bird -->
+  <line x1="100" y1="95" x2="42"  y2="52"  stroke="#4a7fa8" stroke-width="0.5" opacity="0.25"/>
+  <line x1="100" y1="95" x2="70"  y2="42"  stroke="#4a7fa8" stroke-width="0.5" opacity="0.25"/>
+  <line x1="100" y1="95" x2="130" y2="42"  stroke="#4a7fa8" stroke-width="0.5" opacity="0.25"/>
+  <line x1="100" y1="95" x2="158" y2="52"  stroke="#4a7fa8" stroke-width="0.5" opacity="0.25"/>
+  <line x1="100" y1="95" x2="44"  y2="105" stroke="#4a7fa8" stroke-width="0.5" opacity="0.25"/>
+  <line x1="100" y1="95" x2="156" y2="105" stroke="#4a7fa8" stroke-width="0.5" opacity="0.25"/>
+  <line x1="100" y1="95" x2="62"  y2="140" stroke="#4a7fa8" stroke-width="0.5" opacity="0.25"/>
+  <line x1="100" y1="95" x2="138" y2="140" stroke="#4a7fa8" stroke-width="0.5" opacity="0.25"/>
+
+  <!-- Bird silhouette: classic in-flight M shape, centered at cx,cy with scale s -->
+  <!-- Each bird: M cx,cy Q cx-s*1.2,cy-s*0.6 cx-s*2,cy-s*0.4 Q cx-s*1,cy-s*0.1 cx,cy+s*0.4 Q cx+s*1,cy-s*0.1 cx+s*2,cy-s*0.4 Q cx+s*1.2,cy-s*0.6 cx,cy Z -->
+
+  <!-- Outer ring — small birds, dimmer -->
+  <!-- Bird at ~42,52 -->
+  <path d="M 42,52 Q 36,48 30,50 Q 36,51 42,55 Q 48,51 54,50 Q 48,48 42,52 Z" fill="#c8c8d0" opacity="0.65"/>
+  <!-- Bird at ~70,42 -->
+  <path d="M 70,42 Q 64,38 58,40 Q 64,41 70,45 Q 76,41 82,40 Q 76,38 70,42 Z" fill="#c8c8d0" opacity="0.65"/>
+  <!-- Bird at ~130,42 -->
+  <path d="M 130,42 Q 124,38 118,40 Q 124,41 130,45 Q 136,41 142,40 Q 136,38 130,42 Z" fill="#c8c8d0" opacity="0.65"/>
+  <!-- Bird at ~158,52 -->
+  <path d="M 158,52 Q 152,48 146,50 Q 152,51 158,55 Q 164,51 170,50 Q 164,48 158,52 Z" fill="#c8c8d0" opacity="0.65"/>
+  <!-- Bird at ~44,105 -->
+  <path d="M 44,105 Q 38,101 32,103 Q 38,104 44,108 Q 50,104 56,103 Q 50,101 44,105 Z" fill="#c8c8d0" opacity="0.65"/>
+  <!-- Bird at ~156,105 -->
+  <path d="M 156,105 Q 150,101 144,103 Q 150,104 156,108 Q 162,104 168,103 Q 162,101 156,105 Z" fill="#c8c8d0" opacity="0.65"/>
+  <!-- Bird at ~62,140 -->
+  <path d="M 62,140 Q 56,136 50,138 Q 56,139 62,143 Q 68,139 74,138 Q 68,136 62,140 Z" fill="#c8c8d0" opacity="0.65"/>
+  <!-- Bird at ~138,140 -->
+  <path d="M 138,140 Q 132,136 126,138 Q 132,139 138,143 Q 144,139 150,138 Q 144,136 138,140 Z" fill="#c8c8d0" opacity="0.65"/>
+
+  <!-- Mid ring — medium birds, brighter -->
+  <!-- Bird at ~68,72 -->
+  <path d="M 68,72 Q 61,67 53,69 Q 61,71 68,76 Q 75,71 83,69 Q 75,67 68,72 Z" fill="#e0e0e8" opacity="0.78"/>
+  <!-- Bird at ~132,72 -->
+  <path d="M 132,72 Q 125,67 117,69 Q 125,71 132,76 Q 139,71 147,69 Q 139,67 132,72 Z" fill="#e0e0e8" opacity="0.78"/>
+  <!-- Bird at ~52,115 -->
+  <path d="M 52,115 Q 45,110 37,112 Q 45,114 52,119 Q 59,114 67,112 Q 59,110 52,115 Z" fill="#e0e0e8" opacity="0.78"/>
+  <!-- Bird at ~148,115 -->
+  <path d="M 148,115 Q 141,110 133,112 Q 141,114 148,119 Q 155,114 163,112 Q 155,110 148,115 Z" fill="#e0e0e8" opacity="0.78"/>
+
+  <!-- Command bird — center, largest, brightest -->
+  <path d="M 100,95 Q 88,87 76,90 Q 88,93 100,100 Q 112,93 124,90 Q 112,87 100,95 Z" fill="#ffffff" opacity="0.95"/>
+  <!-- Slight glow under command bird -->
+  <ellipse cx="100" cy="96" rx="18" ry="5" fill="#4a7fa8" opacity="0.18"/>
+</svg>

@@ -1,0 +1,15 @@
+runbook "docker-replay-demo" {
+    input "trade_ids_file" default="data/replay/trade-ids.txt"
+
+    task "replay" for_each="${config.envConf.deploy.instances}" label="${item.name}" {
+        context "ssh" host="${item.host}" port="${item.port}" user="${item.login}" identity_file="${item.identity_file}" cwd="${item.base_dir}"
+
+        command "run-replay" {
+            exec "java" "-jar" "replay.jar" "--trade-ids" "${input.trade_ids_file}" "--output" "data/replay/replay.out"
+        }
+
+        command "show-replay-output" {
+            exec "cat" "data/replay/replay.out"
+        }
+    }
+}

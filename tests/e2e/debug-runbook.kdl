@@ -1,0 +1,23 @@
+runbook "docker-debug-demo" {
+    task "debug logging replay" for_each="${config.envConf.run.selected_shards}" label="${item.name}" {
+        context "ssh" host="${item.host}" port="${item.port}" user="${item.login}" identity_file="${item.identity_file}"
+        cwd "${item.root}"
+
+        step "Enable debug logging" {
+            shell """
+                sed -i.bak \
+                    -e 's/loggingLevel=ERROR/loggingLevel=DEBUG/g' \
+                    -e 's/log.level=ERROR/log.level=DEBUG/g' \
+                    config/environment.conf
+                """
+        }
+
+        step "Start Blackbird" {
+            run "app/trading/bin/start.sh"
+        }
+
+        step "Show debug log" {
+            run cat "log/trading/blackbird.log"
+        }
+    }
+}

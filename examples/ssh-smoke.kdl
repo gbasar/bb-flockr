@@ -1,0 +1,19 @@
+runbook "ssh-smoke" {
+    input "host"
+
+    task "inspect" {
+        context "ssh" host="${input.host}"
+
+        command "whoami" {
+            exec "whoami"
+        }
+
+        command "hostname" {
+            exec "hostname"
+        }
+
+        command "pwd" {
+            exec "pwd"
+        }
+    }
+}
