@@ -29,8 +29,6 @@ class ResolvedRunContext:
         )
 
 
-# Can we increase the line number
-# Also think iw ant to do googoe style guiudelines for python, just classs edit by class eidt.
 def resolve_run_context(
     runbook: Runbook,
     config_layers: list[ConfigLayer],

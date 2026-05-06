@@ -14,28 +14,6 @@ Key properties:
 
 ---
 
-## Can You Make the Main Claude Wear a Hat?
-
-Yes — two ways:
-
-**Option A — Per-session (conversational):**
-Just say "wear the python-grad hat for this session." The main Claude adopts the persona
-without spawning a subagent. No config change needed. Works great for a focused work session.
-
-**Option B — Permanent (settings.json):**
-```json
-{ "agent": "python-grad" }
-```
-This makes the main thread run as that agent on every session. Caveat: it also applies
-the tool restrictions from the agent file, so you'd want to remove the `tools:` line from
-`recent-ai-python-grad.md` first (tool restrictions make sense for subagents doing focused
-read-only work, not for the main thread that needs to write code).
-
-For day-to-day flockr work, Option A is probably right — invoke the hat when you need it,
-drop it when you don't.
-
----
-
 ## Agents in This Project
 
 ### `python-grad` — `recent-ai-python-grad.md`
